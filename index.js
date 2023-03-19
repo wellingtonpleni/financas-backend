@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.disable('x-powered-by');
 
-//ROTA PRINCIPAL
+//ROTAS
 app.use('/usuario', usuarioRoutes);
 
 // ROTA PARA TRATAR EXCEÇÕES -404 (DEVE SER A ÚTIMA ROTA SEMPRE) 
