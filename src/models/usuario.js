@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const usuarioSchema = new mongoose.Schema({
+const usuarioSchema = new Schema({
     nome: {
         type: String,
         required: true
@@ -8,7 +9,16 @@ const usuarioSchema = new mongoose.Schema({
     email: {
         type: String,
         reuired: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: function(v){
+                return mongoose.model('Usuario', usuarioSchema)
+                    .findOne({ email: v })
+                    .then(user => !user)
+                    .catch(() => false)
+            },
+            message: props => `${props.value} já está em uso.`
+        }
     },
     senha: {
         type: String,
