@@ -5,14 +5,14 @@ const Categoria = require('../models/categoria');
 //ADICIONAR UMA CATEGORIA
 router.post('/', async (req, res) => {
     try {
-        const { nome, tipo, usuario } = req.body;
+        const { nome, usuario } = req.body;
         const categoriaExistente = await Categoria.findOne({ nome, usuario });
 
         if (categoriaExistente) {
             return res.status(422).json({ erro: true, message: 'Já existe uma categoria com este nome.' });
         }
 
-        const categoria = new Categoria({ nome, tipo, usuario });
+        const categoria = new Categoria(req.body);
         await categoria.save();
 
         res.status(200).json({ message: 'Categoria criada com sucesso.', categoria });
@@ -20,7 +20,6 @@ router.post('/', async (req, res) => {
         if (error.code === 11000) {
             return res.status(422).json({ erro: true, message: error.message });
         }
-        console.log(error);
         res.status(500).json({ erro: true, message: error.message });
     }
 })
@@ -76,17 +75,21 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-//APAGAR UMA CATEGORIA
-router.delete('/:id', async(req, res) => {
+//DELETAR UMA CATEGORIA
+router.delete('/:id', async (req, res) => {
     try {
-        const categoria = await Categoria.findOneAndDelete(req.param.id).lean();
+        const categoria = await Categoria.findByIdAndDelete(req.param.id).lean();
 
-        res.status(200).send({
-            message: "Categoria deletada com sucesso.",
-            categoria: categoria
-        })
+        if (categoria) {
+            return res.status(200).send({
+                message: "Categoria deletada com sucesso.",
+                categoria: categoria
+            })
+        }
+
+        res.status(404).send({message: "Categoria não encontrada."});
     } catch (error) {
-        res.status(500).send({erro: true, message: error.message});
+        res.status(500).send({ erro: true, message: error.message });
     }
 })
 

@@ -9,6 +9,21 @@ router.post('/', async (req, res) => {
         await usuario.save();
         res.status(201).send(usuario);
     } catch (error) {
+        res.status(500).send({ erro: true, message: error.message });
+    }
+})
+
+//OBTER UM USUÁRIO
+router.get('/:id', async (req, res) => {
+    try {
+        const usuario = await Usuario.findById(req.params.id);
+
+        if (usuario) {
+            return res.status(200).json(usuario);
+        }
+
+        res.status(404).send({message: "Usuário não encontrado:"});        
+    } catch (error) {
         res.status(400).send({ erro: true, message: error.message });
     }
 })
@@ -19,7 +34,7 @@ router.get('/', async (req, res) => {
         const usuarios = await Usuario.find({}, '-senha');
         res.status(200).json(usuarios)
     } catch (error) {
-        res.status(400).send({ erro: true, message: error.message });
+        res.status(500).send({ erro: true, message: error.message });
     }
 })
 
@@ -31,9 +46,9 @@ router.put('/:id', async (req, res) => {
             req.body,
             { new: true, select: '-senha' }
         );
-        res.status(200).json(usuario);
+        res.status(200).json({message: "Usuário atualizado com sucesso.",usuario: usuario});
     } catch (error) {
-        res.status(400).json({ erro: true, message: error.message })
+        res.status(500).json({ erro: true, message: error.message })
     }
 })
 
@@ -49,7 +64,7 @@ router.delete('/:id', async (req, res) => {
             usuario: usuario
         });
     } catch (error) {
-        res.status(400).json({ erro: true, message: error.message });
+        res.status(500).json({ erro: true, message: error.message });
     }
 })
 
