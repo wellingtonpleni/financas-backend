@@ -35,8 +35,14 @@ const despesaSchema = new Schema({
         enum: ['A', 'P']
     },
     parcelas: {
-        type: Number,
-        min: 1
+        atual: {
+            type: Number,
+            min: 1
+        },
+        total: {
+            type: Number,
+            min: 1
+        }
     },
     dataPagamento: {
         type: Date,

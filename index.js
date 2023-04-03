@@ -7,6 +7,7 @@ const usuarioRoutes = require('./src/routes/usuario.routes');
 const categoriaRoutes = require('./src/routes/categoria.routes');
 const contaRoutes = require('./src/routes/conta.routes');
 const cartaoRoutes = require('./src/routes/cartao.routes');
+const receitaRoutes = require('./src/routes/receita.routes');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -20,6 +21,7 @@ app.use('/usuario', usuarioRoutes);
 app.use('/categoria', categoriaRoutes);
 app.use('/conta', contaRoutes);
 app.use('/cartao', cartaoRoutes);
+app.use('/receita', receitaRoutes);
 
 // ROTA PARA TRATAR EXCEÇÕES -404 (DEVE SER A ÚTIMA ROTA SEMPRE) 
 app.use(function (req, res) {
